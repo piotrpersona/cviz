@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body {
+    padding: 10px 20px;
+    color: #e3e3e3;
+    background-color: #252333;
+    font-family: 'Courier New', monospace;
+}
+a {
+    color: #e3e3e3;
+}
+img {
+    border: 4px;
+    border-style: solid;
+    border-radius: 2%;
+}
+img:hover {
+    opacity: 0.5;
+}
+.heading {
+    margin: 20px 0px;
+}
+.object {
+    padding 4px 2px;
+}
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+</style>
+</head>
+<body>
+    <div class="heading">
+        <h1>cviz</h1>
+
+        <p>classes:
+        {{ range $class := .Classes }}
+        <b style="color: {{ $class.Color }};">{{ $class.Name }}</b>
+        {{ end }}
+        <p>
+        </br>
+    </div>
+
+    <div class="container">
+        {{ range $obj := .Objects }}
+        <div class="object">
+            <p><b style="color: {{ $obj.ClassColor }}">{{ $obj.BestScore.Class }} {{ $obj.BestScore.Score }}%</b></p>
+            <a href="{{ $obj.FilePath }}" target="_blank">
+                <img src="{{ $obj.FilePath }}" width=200 height=150 style="border-color: {{ $obj.ClassColor }}"/>
+            </a>
+            <!--
+            <p>
+            {{ range $score := $obj.Scores }}
+                {{ $score.Class }}: {{ $score.Score }}
+            {{end}}
+            </p>
+            -->
+        </div>
+        <br/>
+        {{ end }}
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,90 @@
+{
+    "classes": [
+        "dog",
+        "cat",
+        "bird"
+    ],
+    "objects": [
+        {
+            "filePath": "/Users/piotrpersona/developer/github.com/piotrpersona/cviz/examples/dog.jpeg",
+            "class": 0,
+            "scores": [
+                0.97,
+                0.02,
+                0.01
+            ]
+        },
+        {
+            "filePath": "/Users/piotrpersona/developer/github.com/piotrpersona/cviz/examples/cat.jpeg",
+            "class": 1,
+            "scores": [
+                0.07,
+                0.92,
+                0.01
+            ]
+        },
+        {
+            "filePath": "/Users/piotrpersona/developer/github.com/piotrpersona/cviz/examples/bird.jpg",
+            "class": 1,
+            "scores": [
+                0.02,
+                0.03,
+                0.95
+            ]
+        },
+        {
+            "filePath": "/Users/piotrpersona/developer/github.com/piotrpersona/cviz/examples/dog.jpeg",
+            "class": 0,
+            "scores": [
+                0.97,
+                0.02,
+                0.01
+            ]
+        },
+        {
+            "filePath": "/Users/piotrpersona/developer/github.com/piotrpersona/cviz/examples/cat.jpeg",
+            "class": 1,
+            "scores": [
+                0.07,
+                0.92,
+                0.01
+            ]
+        },
+        {
+            "filePath": "/Users/piotrpersona/developer/github.com/piotrpersona/cviz/examples/bird.jpg",
+            "class": 1,
+            "scores": [
+                0.02,
+                0.03,
+                0.95
+            ]
+        },
+        {
+            "filePath": "/Users/piotrpersona/developer/github.com/piotrpersona/cviz/examples/dog.jpeg",
+            "class": 0,
+            "scores": [
+                0.97,
+                0.02,
+                0.01
+            ]
+        },
+        {
+            "filePath": "/Users/piotrpersona/developer/github.com/piotrpersona/cviz/examples/cat.jpeg",
+            "class": 1,
+            "scores": [
+                0.07,
+                0.92,
+                0.01
+            ]
+        },
+        {
+            "filePath": "/Users/piotrpersona/developer/github.com/piotrpersona/cviz/examples/bird.jpg",
+            "class": 1,
+            "scores": [
+                0.02,
+                0.03,
+                0.95
+            ]
+        }
+    ]
+}
