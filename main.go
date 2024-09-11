@@ -220,13 +220,6 @@ func generateColors(nClasses int) []string {
 	return colorsHex
 }
 
-func abs(a int) int {
-	if a < 0 {
-		return -a
-	}
-	return a
-}
-
 type Color struct {
 	R, G, B int
 }
