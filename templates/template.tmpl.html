@@ -30,6 +30,15 @@ img:hover {
     flex-wrap: wrap;
     gap: 10px;
 }
+select {
+    width: 100px;
+    padding: 5px;
+    border: 2px solid #4CAF50;
+    background-color: #252333;
+    color: #e3e3e3;
+    font-size: 16px;
+    border-radius: 5px;
+}
 </style>
 </head>
 <body>
@@ -45,8 +54,11 @@ img:hover {
     </div>
 
     <div>
-        <select id="limitSelector" size="4">
-            <option>20</option>
+        <label for="limitSelector">limit:</label>
+        <select id="limitSelector" onchange="selectLimit()">
+            <option>5</option>
+            <option>10</option>
+            <option selected>20</option>
             <option>50</option>
             <option>100</option>
         </select>
@@ -71,7 +83,33 @@ img:hover {
         {{ end }}
     </div>
 <script>
+    const defaultLimit = 20;
     
+    window.addEventListener('load', function() {
+        let limitSelector = document.getElementById("limitSelector");
+
+        const queryParams = window.location.search;
+        let urlParams = new URLSearchParams(queryParams);
+        const limit = urlParams.get('limit');
+
+        if (limit === null || limit === undefined) {
+            limitSelector.value = defaultlimit;
+        } else {
+            limitSelector.value = limit;
+        }
+    });
+
+    function selectLimit() {
+        const limitSelector = document.getElementById("limitSelector");
+        const selectedOption = limitSelector.value;
+        const queryParams = window.location.search;
+
+        let urlParams = new URLSearchParams(queryParams);
+        urlParams.set('limit', selectedOption);
+        const newUrl = `${window.location.pathname}?${urlParams.toString()}`;
+
+        window.location.href = newUrl;
+    }
 </script>
 </body>
 <html>
