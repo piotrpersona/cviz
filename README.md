@@ -4,7 +4,7 @@ Visualization tool, designed for image classification.
 It generates HTML from JSON and opens a web browser. No 3rd party software
 required.
 
-![preview](./media/cviz.png)
+![preview](./media/cviz.mov)
 
 
 ## Install

@@ -48,7 +48,7 @@ select {
 <body>
     <div class="heading">
         <h1>cviz</h1>
-        <p>Arrow Left/Right - previous/next page, 1 - limit 10, 2 - limit 20, 5 - limit 5</p>
+        <p>Arrow Left/Right - previous/next page, 1 - limit 10, 2 - limit 20, 5 - limit 5, 0 - reset to defaults</p>
         <label for="limitSelector">limit:</label>
         <select id="limitSelector" onchange="selectLimit()">
             <option>5</option>
@@ -70,6 +70,7 @@ select {
     </div>
 <script>
     // handle limit selection
+    const defaultPage = 1;
     const defaultLimit = 20;
     
     window.addEventListener('load', function() {
@@ -105,7 +106,7 @@ select {
         let urlParams = new URLSearchParams(queryParams);
         let page = urlParams.get('page');
         if (page === null || page === undefined) {
-            page = 1
+            page = defaultPage;
         }
         let limit = urlParams.get('limit');
 
@@ -129,6 +130,10 @@ select {
         }
         else if (e.keyCode == 53) {
             limit = 5;
+        }
+        else if (e.keyCode == 48) {
+            limit = defaultLimit;
+            page = defaultPage;
         }
         if (limit === undefined || limit === null) {
             limit = defaultLimit;
