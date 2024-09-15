@@ -44,9 +44,13 @@ img:hover {
         </br>
     </div>
 
+    <div>
+
+    </div>
+
     <div class="container">
         {{ range $obj := .Objects }}
-        <div class="object">
+        <div class="object"> 
             <p><b style="color: {{ $obj.ClassColor }}">{{ $obj.BestScore.Class }} {{ $obj.BestScore.Score }}%</b></p>
             <a href="{{ $obj.FilePath }}" target="_blank">
                 <img src="{{ $obj.FilePath }}" width=200 height=150 style="border-color: {{ $obj.ClassColor }}"/>
@@ -62,6 +66,8 @@ img:hover {
         <br/>
         {{ end }}
     </div>
-
+<script>
+    
+</script>
 </body>
-</html>
+<html>

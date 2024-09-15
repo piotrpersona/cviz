@@ -8,10 +8,12 @@ import (
 	"log"
 	"math/rand"
 	"net/http"
+	"net/url"
 	"os"
 	"os/exec"
 	"runtime"
 	"sort"
+	"strconv"
 	"text/template"
 )
 
@@ -201,10 +203,37 @@ func startHttpServer(addr string, tmpl *template.Template, tmplData TemplateData
 	})
 
 	http.HandleFunc("/cviz", func(w http.ResponseWriter, r *http.Request) {
-		tmpl.Execute(w, tmplData)
+		page, limit := parseQueryPaging(r.URL.Query())
+		data := tmplData
+		offsetStart := (page - 1) * limit
+		offsetEnd := page * limit
+		dataLen := len(data.Objects[offsetStart:])
+		if offsetEnd > dataLen {
+			offsetEnd = dataLen
+		}
+		data.Objects = data.Objects[offsetStart:offsetEnd]
+		tmpl.Execute(w, data)
 	})
 
 	http.ListenAndServe(addr, nil)
+}
+
+func parseQueryPaging(values url.Values) (int, int) {
+	page := 1
+	limit := 20
+	if limitStr := values.Get("limit"); limitStr != "" {
+		limitInt, err := strconv.Atoi(limitStr)
+		if err == nil {
+			limit = limitInt
+		}
+	}
+	if pageStr := values.Get("page"); pageStr != "" {
+		pageInt, err := strconv.Atoi(pageStr)
+		if err != nil {
+			page = pageInt
+		}
+	}
+	return page, limit
 }
 
 func generateColors(nClasses int) []string {
