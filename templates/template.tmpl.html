@@ -7,6 +7,7 @@ body {
     color: #e3e3e3;
     background-color: #252333;
     font-family: 'Courier New', monospace;
+    font-size: 13px;
 }
 a {
     color: #e3e3e3;
@@ -36,7 +37,7 @@ img:hover {
 select {
     width: 100px;
     padding: 5px;
-    border: 2px solid #4CAF50;
+    border: 2px solid #323040;
     background-color: #252333;
     color: #e3e3e3;
     font-size: 16px;
@@ -47,23 +48,13 @@ select {
 <body>
     <div class="heading">
         <h1>cviz</h1>
-        <p>Arrow Left/Right - previous/next page</p>
-        <p>1 - limit 10, 2 - limit 20, 5 - limit 5</p>
+        <p>Arrow Left/Right - previous/next page, 1 - limit 10, 2 - limit 20, 5 - limit 5</p>
         <label for="limitSelector">limit:</label>
         <select id="limitSelector" onchange="selectLimit()">
             <option>5</option>
             <option>10</option>
             <option selected>20</option>
         </select>
-    </div>
-
-    <div class="classes">
-        <p>classes:
-        {{ range $class := .Classes }}
-        <b style="color: {{ $class.Color }};">{{ $class.Name }}</b>
-        {{ end }}
-        <p>
-        </br>
     </div>
 
     <div class="container">
@@ -73,13 +64,6 @@ select {
             <a href="{{ $obj.FilePath }}" target="_blank">
                 <img src="{{ $obj.FilePath }}" width=200 height=150 style="border-color: {{ $obj.ClassColor }}"/>
             </a>
-            <!--
-            <p>
-            {{ range $score := $obj.Scores }}
-                {{ $score.Class }}: {{ $score.Score }}
-            {{end}}
-            </p>
-            -->
         </div>
         <br/>
         {{ end }}

@@ -139,7 +139,7 @@ func mapTemplateData(cfg InputConfig) TemplateData {
 	}
 	for _, obj := range cfg.Objects {
 		tObj := TemplateObject{
-			ID:       uuid.NewString(),
+			ID:       string(uuid.NewString()[29:]),
 			FilePath: obj.FilePath,
 			Scores:   make([]TemplateObjectScore, 0, len(cfg.Classes)),
 		}
@@ -253,6 +253,9 @@ func generateColors(nClasses int) []string {
 	colors := make([]*Color, 0, nClasses)
 	for i := 0; i < nClasses; i++ {
 		color := generateColor()
+		for color.IsClose(NewColor(37, 35, 51)) { // background color
+			color = generateColor()
+		}
 		colors = append(colors, color)
 	}
 	colorsHex := make([]string, 0, len(colors))
@@ -266,37 +269,34 @@ type Color struct {
 	R, G, B int
 }
 
+func NewColor(r, g, b int) *Color {
+	return &Color{R: r, G: g, B: b}
+}
+
 func (c *Color) Hex() string {
 	return fmt.Sprintf("#%02X%02X%02X", c.R, c.G, c.B)
 }
 
-func (c *Color) Sum() int {
-	return c.R + c.G + c.B
+func (c *Color) IsClose(o *Color) bool {
+	t := 30
+	return abs(o.R-c.R) < t && abs(o.G-c.G) < t && abs(o.B-c.B) < t
 }
 
-func generateBrightColor() *Color {
-	const brightThreshold = 350 // ensure that colors are bright
-	color := generateColor()
-	for color.Sum() < brightThreshold {
-		color = generateColor()
+func abs(a int) int {
+	if a < 0 {
+		return -a
 	}
-	return color
+	return a
 }
 
 func generateColor() *Color {
 	const min = 64
-	const brightThreshold = 128
 
 	var r, g, b int
 
-	r = rand.Intn(256)
-	if r > brightThreshold {
-		g = rand.Intn(256-min) + min
-		b = rand.Intn(256-min) + min
-	} else {
-		g = rand.Intn(256-brightThreshold) + brightThreshold
-		b = rand.Intn(256-brightThreshold) + brightThreshold
-	}
+	r = rand.Intn(256-min) + min
+	g = rand.Intn(256-min) + min
+	b = rand.Intn(256-min) + min
 
 	return &Color{
 		R: r,
