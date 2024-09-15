@@ -30,6 +30,9 @@ img:hover {
     flex-wrap: wrap;
     gap: 10px;
 }
+.navigation {
+    margin: 20px 0px 40px 0px;
+}
 select {
     width: 100px;
     padding: 5px;
@@ -53,7 +56,8 @@ select {
         </br>
     </div>
 
-    <div>
+    <div class="navigation">
+        <p>Navigate using arrow Left/Right to switch between pages.</p>
         <label for="limitSelector">limit:</label>
         <select id="limitSelector" onchange="selectLimit()">
             <option>5</option>
@@ -66,7 +70,7 @@ select {
 
     <div class="container">
         {{ range $obj := .Objects }}
-        <div class="object"> 
+        <div id="{{ $obj.ID }}" class="object"> 
             <p><b style="color: {{ $obj.ClassColor }}">{{ $obj.BestScore.Class }} {{ $obj.BestScore.Score }}%</b></p>
             <a href="{{ $obj.FilePath }}" target="_blank">
                 <img src="{{ $obj.FilePath }}" width=200 height=150 style="border-color: {{ $obj.ClassColor }}"/>
@@ -83,6 +87,7 @@ select {
         {{ end }}
     </div>
 <script>
+    // handle limit selection
     const defaultLimit = 20;
     
     window.addEventListener('load', function() {
@@ -102,10 +107,52 @@ select {
     function selectLimit() {
         const limitSelector = document.getElementById("limitSelector");
         const selectedOption = limitSelector.value;
+
         const queryParams = window.location.search;
 
         let urlParams = new URLSearchParams(queryParams);
-        urlParams.set('limit', selectedOption);
+        urlParams.set('limit', limit);
+        const newUrl = `${window.location.pathname}?${urlParams.toString()}`;
+
+        window.location.href = newUrl;
+    }
+
+    // handle page selection
+    document.onkeydown = function(e) {
+        const queryParams = window.location.search;
+        let urlParams = new URLSearchParams(queryParams);
+        let page = urlParams.get('page');
+        if (page === null || page === undefined) {
+            page = 1
+        }
+        let limit = urlParams.get('limit');
+
+        e = e || window.event;
+
+        if (e.key == 'ArrowLeft') {
+            if (page > 1) {
+                page--;
+            }
+        }
+        else if (e.key == 'ArrowRight') {
+            if (!{{ .LastPage }}) {
+                page++;
+            }
+        }
+        else if (e.keyCode == 49) {
+            limit = 10;
+        }
+        else if (e.keyCode == 50) {
+            limit = 20;
+        }
+        else if (e.keyCode == 53) {
+            limit = 5;
+        }
+        if (limit === undefined || limit === null) {
+            limit = defaultLimit;
+        }
+        urlParams.set('limit', limit);
+        urlParams.set('page', page);
         const newUrl = `${window.location.pathname}?${urlParams.toString()}`;
 
         window.location.href = newUrl;

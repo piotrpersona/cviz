@@ -15,6 +15,8 @@ import (
 	"sort"
 	"strconv"
 	"text/template"
+
+	"github.com/google/uuid"
 )
 
 //go:embed templates/*
@@ -37,11 +39,13 @@ type InputObjects struct {
 }
 
 type TemplateData struct {
-	Classes []TemplateClass
-	Objects []TemplateObject
+	Classes  []TemplateClass
+	Objects  []TemplateObject
+	LastPage bool
 }
 
 type TemplateObject struct {
+	ID         string
 	FilePath   string
 	BestScore  TemplateObjectScore
 	Label      *string
@@ -135,6 +139,7 @@ func mapTemplateData(cfg InputConfig) TemplateData {
 	}
 	for _, obj := range cfg.Objects {
 		tObj := TemplateObject{
+			ID:       uuid.NewString(),
 			FilePath: obj.FilePath,
 			Scores:   make([]TemplateObjectScore, 0, len(cfg.Classes)),
 		}
@@ -204,15 +209,23 @@ func startHttpServer(addr string, tmpl *template.Template, tmplData TemplateData
 
 	http.HandleFunc("/cviz", func(w http.ResponseWriter, r *http.Request) {
 		page, limit := parseQueryPaging(r.URL.Query())
-		data := tmplData
+		totalLen := len(tmplData.Objects)
 		offsetStart := (page - 1) * limit
-		offsetEnd := page * limit
-		dataLen := len(data.Objects[offsetStart:])
-		if offsetEnd > dataLen {
-			offsetEnd = dataLen
+		if offsetStart >= totalLen {
+			offsetStart = totalLen - limit
+			if offsetStart < 0 {
+				offsetStart = 0
+			}
 		}
-		data.Objects = data.Objects[offsetStart:offsetEnd]
-		tmpl.Execute(w, data)
+		offsetEnd := offsetStart + limit
+		if offsetEnd > totalLen {
+			offsetEnd = totalLen
+		}
+		tmpl.Execute(w, TemplateData{
+			Classes:  tmplData.Classes,
+			Objects:  tmplData.Objects[offsetStart:offsetEnd],
+			LastPage: offsetEnd == totalLen,
+		})
 	})
 
 	http.ListenAndServe(addr, nil)
@@ -223,13 +236,13 @@ func parseQueryPaging(values url.Values) (int, int) {
 	limit := 20
 	if limitStr := values.Get("limit"); limitStr != "" {
 		limitInt, err := strconv.Atoi(limitStr)
-		if err == nil {
+		if err == nil && limitInt > 0 {
 			limit = limitInt
 		}
 	}
 	if pageStr := values.Get("page"); pageStr != "" {
 		pageInt, err := strconv.Atoi(pageStr)
-		if err != nil {
+		if err == nil && pageInt > 0 {
 			page = pageInt
 		}
 	}
