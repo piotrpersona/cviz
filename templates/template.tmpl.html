@@ -30,8 +30,8 @@ img:hover {
     flex-wrap: wrap;
     gap: 10px;
 }
-.navigation {
-    margin: 20px 0px 40px 0px;
+.classes {
+    margin: 40px 0px 20px 0px;
 }
 select {
     width: 100px;
@@ -47,26 +47,23 @@ select {
 <body>
     <div class="heading">
         <h1>cviz</h1>
-
-        <p>classes:
-        {{ range $class := .Classes }}
-        <b style="color: {{ $class.Color }};">{{ $class.Name }}</b>
-        {{ end }}
-        <p>
-        </br>
-    </div>
-
-    <div class="navigation">
-        <p>Navigate using arrow Left/Right to switch between pages.</p>
+        <p>Arrow Left/Right - previous/next page</p>
         <p>1 - limit 10, 2 - limit 20, 5 - limit 5</p>
         <label for="limitSelector">limit:</label>
         <select id="limitSelector" onchange="selectLimit()">
             <option>5</option>
             <option>10</option>
             <option selected>20</option>
-            <option>50</option>
-            <option>100</option>
         </select>
+    </div>
+
+    <div class="classes">
+        <p>classes:
+        {{ range $class := .Classes }}
+        <b style="color: {{ $class.Color }};">{{ $class.Name }}</b>
+        {{ end }}
+        <p>
+        </br>
     </div>
 
     <div class="container">
