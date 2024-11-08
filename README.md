@@ -1,8 +1,7 @@
 # cviz
 
 Visualization tool, designed for image classification.
-It generates HTML from JSON and opens a web browser. No 3rd party software
-required.
+It generates HTML from JSON and opens a web browser.
 
 ![Video thumbnail](./media/thumbnail.png)
 
@@ -10,7 +9,7 @@ required.
 ## Install
 
 ```sh
-go install github.com/piotrpersona/cviz
+go install github.com/piotrpersona/cviz@latest
 ```
 
 ## Usage
@@ -23,13 +22,13 @@ JSON must be in format:
 ```json
 {
     "classes": [
-        "dog",
-        "cat",
-        "bird"
+        "peacock",
+        "bird",
+        "sunflower"
     ],
     "objects": [
         {
-            "filePath": "/path/to/dog.jpeg",
+            "filePath": "/path/to/peacock.jpeg",
             "class": 0,
             "scores": [
                 0.97,
@@ -42,4 +41,11 @@ JSON must be in format:
 ```
 
 Example in [./examples](./examples).
+
+## Manual
+
+- Left/Right - navigation
+- 1 - limit 10
+- 2 - limit 20
+- 5 - limit 5
 

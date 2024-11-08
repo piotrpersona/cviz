@@ -1,89 +1,69 @@
 {
     "classes": [
-        "dog",
-        "cat",
-        "bird"
+        "bird",
+        "flower",
+        "peacock",
+        "sunflower"
     ],
     "objects": [
         {
-            "filePath": "/Users/piotrpersona/developer/github.com/piotrpersona/cviz/examples/dog.jpeg",
+            "filePath": "/Users/piotrpersona/developer/github.com/piotrpersona/cviz/examples/images/bird.jpg",
             "class": 0,
             "scores": [
-                0.97,
+                0.95,
                 0.02,
-                0.01
+                0.01,
+                0.02
             ]
         },
         {
-            "filePath": "/Users/piotrpersona/developer/github.com/piotrpersona/cviz/examples/cat.jpeg",
+            "filePath": "/Users/piotrpersona/developer/github.com/piotrpersona/cviz/examples/images/flower.jpg",
             "class": 1,
             "scores": [
-                0.07,
-                0.92,
-                0.01
-            ]
-        },
-        {
-            "filePath": "/Users/piotrpersona/developer/github.com/piotrpersona/cviz/examples/bird.jpg",
-            "class": 1,
-            "scores": [
-                0.02,
                 0.03,
-                0.95
-            ]
-        },
-        {
-            "filePath": "/Users/piotrpersona/developer/github.com/piotrpersona/cviz/examples/dog.jpeg",
-            "class": 0,
-            "scores": [
-                0.97,
-                0.02,
-                0.01
-            ]
-        },
-        {
-            "filePath": "/Users/piotrpersona/developer/github.com/piotrpersona/cviz/examples/cat.jpeg",
-            "class": 1,
-            "scores": [
-                0.07,
                 0.92,
-                0.01
+                0.01,
+                0.02
             ]
         },
         {
-            "filePath": "/Users/piotrpersona/developer/github.com/piotrpersona/cviz/examples/bird.jpg",
-            "class": 1,
+            "filePath": "/Users/piotrpersona/developer/github.com/piotrpersona/cviz/examples/images/peacock.jpg",
+            "class": 2,
             "scores": [
-                0.02,
+                0.17,
                 0.03,
-                0.95
+                0.78,
+                0.02   
             ]
         },
         {
-            "filePath": "/Users/piotrpersona/developer/github.com/piotrpersona/cviz/examples/dog.jpeg",
-            "class": 0,
+            "filePath": "/Users/piotrpersona/developer/github.com/piotrpersona/cviz/examples/images/flower2.jpg",
+            "class":1,
             "scores": [
-                0.97,
-                0.02,
-                0.01
-            ]
-        },
-        {
-            "filePath": "/Users/piotrpersona/developer/github.com/piotrpersona/cviz/examples/cat.jpeg",
-            "class": 1,
-            "scores": [
-                0.07,
-                0.92,
-                0.01
-            ]
-        },
-        {
-            "filePath": "/Users/piotrpersona/developer/github.com/piotrpersona/cviz/examples/bird.jpg",
-            "class": 1,
-            "scores": [
-                0.02,
                 0.03,
-                0.95
+                0.87,
+                0.01,
+                0.09
+            ]
+        },
+        {
+            "filePath": "/Users/piotrpersona/developer/github.com/piotrpersona/cviz/examples/images/sunflower.avif",
+            "class": 4,
+            "scores": [
+                0.08,
+                0.02,
+                0.1,
+                0.8
+            ]
+        },
+        {
+            "filePath": "/Users/piotrpersona/developer/github.com/piotrpersona/cviz/examples/images/sunflower2.jpg",
+            "class": 4,
+            "scores": [
+                0.08,
+                0.02,
+                0.12,
+                0.78
             ]
         }
     ]

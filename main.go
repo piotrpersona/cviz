@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io"
 	"log"
-	"math/rand"
 	"net/http"
 	"net/url"
 	"os"
@@ -124,7 +123,7 @@ func readConfig() (*InputConfig, error) {
 }
 
 func mapTemplateData(cfg InputConfig) TemplateData {
-	colors := generateColors(len(cfg.Classes))
+	colors := getColors(len(cfg.Classes))
 	classes := make([]TemplateClass, 0, len(cfg.Classes))
 	for i := range colors {
 		classes = append(classes, TemplateClass{
@@ -249,58 +248,42 @@ func parseQueryPaging(values url.Values) (int, int) {
 	return page, limit
 }
 
-func generateColors(nClasses int) []string {
-	colors := make([]*Color, 0, nClasses)
-	for i := 0; i < nClasses; i++ {
-		color := generateColor()
-		for color.IsClose(NewColor(37, 35, 51)) { // background color
-			color = generateColor()
-		}
-		colors = append(colors, color)
+func getColors(n int) []string {
+	colors := make([]string, n)
+	for i := 0; i < n; i++ {
+		it := i % len(baseColors)
+		color := baseColors[it]
+		colors[i] = color
 	}
-	colorsHex := make([]string, 0, len(colors))
-	for _, color := range colors {
-		colorsHex = append(colorsHex, color.Hex())
-	}
-	return colorsHex
+	return colors
 }
 
-type Color struct {
-	R, G, B int
-}
-
-func NewColor(r, g, b int) *Color {
-	return &Color{R: r, G: g, B: b}
-}
-
-func (c *Color) Hex() string {
-	return fmt.Sprintf("#%02X%02X%02X", c.R, c.G, c.B)
-}
-
-func (c *Color) IsClose(o *Color) bool {
-	t := 30
-	return abs(o.R-c.R) < t && abs(o.G-c.G) < t && abs(o.B-c.B) < t
-}
-
-func abs(a int) int {
-	if a < 0 {
-		return -a
-	}
-	return a
-}
-
-func generateColor() *Color {
-	const min = 64
-
-	var r, g, b int
-
-	r = rand.Intn(256-min) + min
-	g = rand.Intn(256-min) + min
-	b = rand.Intn(256-min) + min
-
-	return &Color{
-		R: r,
-		G: g,
-		B: b,
-	}
+var baseColors = []string{
+	"#eb6f92",
+	"#f6c177",
+	"#8ad8e8",
+	"#ebbcba",
+	"#c4a7e7",
+	"#29bdab",
+	"#3998f5",
+	"#37294f",
+	"#277da7",
+	"#f22020",
+	"#991919",
+	"#ffcba5",
+	"#e68f66",
+	"#c56133",
+	"#96341c",
+	"#632819",
+	"#ffc413",
+	"#f47a22",
+	"#2f2aa0",
+	"#b732cc",
+	"#772b9d",
+	"#f07cab",
+	"#d30b94",
+	"#edeff3",
+	"#c3a5b4",
+	"#946aa2",
+	"#5d4c86",
 }
