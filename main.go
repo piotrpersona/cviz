@@ -198,6 +198,7 @@ func startHttpServer(addr string, tmpl *template.Template, tmplData TemplateData
 			w.Write([]byte(err.Error()))
 			return
 		}
+		defer file.Close()
 		_, err = io.Copy(w, file)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
