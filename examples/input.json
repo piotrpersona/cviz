@@ -7,64 +7,35 @@
     ],
     "objects": [
         {
-            "filePath": "/Users/piotrpersona/developer/github.com/piotrpersona/cviz/examples/images/bird.jpg",
+            "file": "/Users/piotrpersona/developer/github.com/piotrpersona/cviz/examples/images/bird.jpg",
             "class": 0,
-            "scores": [
-                0.95,
-                0.02,
-                0.01,
-                0.02
-            ]
+            "score": 0.95
         },
         {
-            "filePath": "/Users/piotrpersona/developer/github.com/piotrpersona/cviz/examples/images/flower.jpg",
+            "file": "/Users/piotrpersona/developer/github.com/piotrpersona/cviz/examples/images/flower.jpg",
             "class": 1,
-            "scores": [
-                0.03,
-                0.92,
-                0.01,
-                0.02
-            ]
+            "score": 0.92
         },
         {
-            "filePath": "/Users/piotrpersona/developer/github.com/piotrpersona/cviz/examples/images/peacock.jpg",
+            "file": "/Users/piotrpersona/developer/github.com/piotrpersona/cviz/examples/images/peacock.jpg",
             "class": 2,
-            "scores": [
-                0.17,
-                0.03,
-                0.78,
-                0.02   
-            ]
+            "score": 0.89
         },
         {
-            "filePath": "/Users/piotrpersona/developer/github.com/piotrpersona/cviz/examples/images/flower2.jpg",
-            "class":1,
-            "scores": [
-                0.03,
-                0.87,
-                0.01,
-                0.09
-            ]
+            "file": "/Users/piotrpersona/developer/github.com/piotrpersona/cviz/examples/images/flower2.jpg",
+            "class": 1,
+            "score": 0.7
         },
         {
-            "filePath": "/Users/piotrpersona/developer/github.com/piotrpersona/cviz/examples/images/sunflower.avif",
-            "class": 4,
-            "scores": [
-                0.08,
-                0.02,
-                0.1,
-                0.8
-            ]
+            "file": "/Users/piotrpersona/developer/github.com/piotrpersona/cviz/examples/images/sunflower.avif",
+            "class": 3,
+            "score": 0.8
         },
         {
-            "filePath": "/Users/piotrpersona/developer/github.com/piotrpersona/cviz/examples/images/sunflower2.jpg",
-            "class": 4,
-            "scores": [
-                0.08,
-                0.02,
-                0.12,
-                0.78
-            ]
+            "file": "/Users/piotrpersona/developer/github.com/piotrpersona/cviz/examples/images/sunflower2.jpg",
+            "class": 1,
+            "label": 3,
+            "score": 0.78
         }
     ]
 }

@@ -72,9 +72,14 @@ select {
         {{ range $obj := .Objects }}
         <div id="{{ $obj.ID }}" class="object"> 
             <a href="{{ $obj.FilePath }}" target="_blank">
-                <img src="{{ $obj.FilePath }}" width=200 height=150 style="border-color: {{ $obj.ClassColor }}"/>
+                <img src="{{ $obj.FilePath }}" width=200 height=150 style="border-color: {{ $obj.PredictedClassColorHex }}"/>
             </a>
-            <p><b style="color: {{ $obj.ClassColor }}">{{ $obj.BestScore.Class }} {{ $obj.BestScore.Score }}%</b></p>
+            <p>
+                <b style="color: {{ $obj.PredictedClassColorHex }}">{{ $obj.PredictedClassName }} {{ $obj.Score }}%</b>
+                {{ if and $obj.GroundTruth (not $obj.GroundTruth.Match) }}
+                <b style="color: {{ $obj.GroundTruth.ClassColorHex }}">{{ $obj.GroundTruth.ClassName }}</b>
+                {{ end }}
+            </p>
         </div>
         <br/>
         {{ end }}

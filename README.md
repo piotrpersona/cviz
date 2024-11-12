@@ -28,17 +28,21 @@ JSON must be in format:
     ],
     "objects": [
         {
-            "filePath": "/path/to/peacock.jpeg",
+            "file": "/path/to/peacock.jpeg",
+            "label": 1,
             "class": 0,
-            "scores": [
-                0.97,
-                0.02,
-                0.01
-            ]
+            "score": 0.97
         }
     ]
 }
 ```
+
+Properties:
+- `file` - absolute path to image on local disk
+- `label` - ground truth class index
+- `class` - predicted class index
+- `score` - predicted score for given class
+
 
 Example in [./examples](./examples).
 

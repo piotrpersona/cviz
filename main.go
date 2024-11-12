@@ -11,8 +11,8 @@ import (
 	"os"
 	"os/exec"
 	"runtime"
-	"sort"
 	"strconv"
+	"strings"
 	"text/template"
 
 	"github.com/google/uuid"
@@ -31,35 +31,30 @@ type InputConfig struct {
 }
 
 type InputObjects struct {
-	FilePath string    `json:"filePath"`
-	Class    int       `json:"class"`
-	Label    *int      `json:"label"`
-	Scores   []float32 `json:"scores"`
+	File  string  `json:"file"`
+	Label *int    `json:"label"`
+	Class int     `json:"class"`
+	Score float32 `json:"score"`
 }
 
 type TemplateData struct {
-	Classes  []TemplateClass
 	Objects  []TemplateObject
 	LastPage bool
 }
 
 type TemplateObject struct {
-	ID         string
-	FilePath   string
-	BestScore  TemplateObjectScore
-	Label      *string
-	Scores     []TemplateObjectScore
-	ClassColor string
+	ID                     string
+	FilePath               string
+	GroundTruth            *GroundTruth
+	PredictedClassName     string
+	Score                  float32
+	PredictedClassColorHex string
 }
 
-type TemplateObjectScore struct {
-	Class string
-	Score float32
-}
-
-type TemplateClass struct {
-	Name  string
-	Color string
+type GroundTruth struct {
+	ClassName     string
+	ClassColorHex string
+	Match         bool
 }
 
 func main() {
@@ -69,6 +64,10 @@ func main() {
 func run() error {
 	cfg, err := readConfig()
 	if err != nil {
+		return err
+	}
+
+	if err := validateConfig(cfg); err != nil {
 		return err
 	}
 
@@ -109,65 +108,70 @@ func readConfig() (*InputConfig, error) {
 		return nil, fmt.Errorf("provide input config path to read")
 	}
 
-	file, err := os.OpenFile(os.Args[1], os.O_RDONLY, 0o644)
+	filePath := os.Args[1]
+	file, err := os.OpenFile(filePath, os.O_RDONLY, 0o644)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("cannot open file: '%s', err: %w", filePath, err)
 	}
 
 	var cfg InputConfig
 	err = json.NewDecoder(file).Decode(&cfg)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("provided config is not a valid JSON, err: %w", err)
 	}
 	return &cfg, nil
 }
 
-func mapTemplateData(cfg InputConfig) TemplateData {
-	colors := getColors(len(cfg.Classes))
-	classes := make([]TemplateClass, 0, len(cfg.Classes))
-	for i := range colors {
-		classes = append(classes, TemplateClass{
-			Name:  cfg.Classes[i],
-			Color: colors[i],
-		})
+func validateConfig(cfg *InputConfig) error {
+	errorMessages := make([]string, 0)
+	nClasses := len(cfg.Classes)
+	for _, object := range cfg.Objects {
+		if object.Class < 0 {
+			errorMessages = append(errorMessages, fmt.Sprintf("object '%s' class cannot be < 0, found: %d", object.File, object.Class))
+		}
+		if object.Class > nClasses {
+			errorMessages = append(errorMessages, fmt.Sprintf("object '%s' class cannot be > %d (total classes length), found: %d", object.File, nClasses, object.Class))
+		}
+		if object.Label != nil {
+			if *object.Label < 0 {
+				errorMessages = append(errorMessages, fmt.Sprintf("object '%s' label cannot be < 0, found: %d", object.File, *object.Label))
+			}
+			if *object.Label > nClasses {
+				errorMessages = append(errorMessages, fmt.Sprintf("object '%s' label cannot be > %d (total classes length), found: %d", object.File, nClasses, *object.Label))
+			}
+		}
+		if object.Score < 0 {
+			errorMessages = append(errorMessages, fmt.Sprintf("object '%s' score cannot be < 0.0 found: %.2f", object.File, object.Score))
+		}
+		if object.Score > 1.0 {
+			errorMessages = append(errorMessages, fmt.Sprintf("object '%s' score cannot be > 1.0 found: %.2f", object.File, object.Score))
+		}
 	}
+	if len(errorMessages) > 0 {
+		return fmt.Errorf("corrupted config: \n%s", strings.Join(errorMessages, "\n"))
+	}
+	return nil
+}
 
+func mapTemplateData(cfg InputConfig) TemplateData {
 	td := TemplateData{
-		Classes: classes,
 		Objects: make([]TemplateObject, 0, len(cfg.Objects)),
 	}
 	for _, obj := range cfg.Objects {
 		tObj := TemplateObject{
-			ID:       string(uuid.NewString()[29:]),
-			FilePath: obj.FilePath,
-			Scores:   make([]TemplateObjectScore, 0, len(cfg.Classes)),
+			ID:                     string(uuid.NewString()[29:]),
+			FilePath:               obj.File,
+			Score:                  obj.Score * 100,
+			PredictedClassName:     cfg.Classes[obj.Class],
+			PredictedClassColorHex: getColor(obj.Class),
 		}
 		if obj.Label != nil {
-			label := cfg.Classes[*obj.Label]
-			tObj.Label = &label
-		}
-		bestScoreIdx := 0
-		bestScore := TemplateObjectScore{}
-		for idx, score := range obj.Scores {
-			if idx >= maxScores {
-				break
-			}
-			tScore := TemplateObjectScore{
-				Class: cfg.Classes[idx],
-				Score: score * 100,
-			}
-			tObj.Scores = append(tObj.Scores, tScore)
-			if tScore.Score > bestScore.Score {
-				bestScoreIdx = idx
-				bestScore = tScore
+			tObj.GroundTruth = &GroundTruth{
+				ClassName:     cfg.Classes[*obj.Label],
+				ClassColorHex: getColor(*obj.Label),
+				Match:         *obj.Label == obj.Class,
 			}
 		}
-		tObj.ClassColor = colors[bestScoreIdx]
-		sort.Slice(tObj.Scores, func(i, j int) bool {
-			return tObj.Scores[i].Score > tObj.Scores[j].Score
-		})
-		tObj.Scores = tObj.Scores[1:]
-		tObj.BestScore = bestScore
 		td.Objects = append(td.Objects, tObj)
 	}
 	return td
@@ -222,7 +226,6 @@ func startHttpServer(addr string, tmpl *template.Template, tmplData TemplateData
 			offsetEnd = totalLen
 		}
 		tmpl.Execute(w, TemplateData{
-			Classes:  tmplData.Classes,
 			Objects:  tmplData.Objects[offsetStart:offsetEnd],
 			LastPage: offsetEnd == totalLen,
 		})
@@ -249,14 +252,9 @@ func parseQueryPaging(values url.Values) (int, int) {
 	return page, limit
 }
 
-func getColors(n int) []string {
-	colors := make([]string, n)
-	for i := 0; i < n; i++ {
-		it := i % len(baseColors)
-		color := baseColors[it]
-		colors[i] = color
-	}
-	return colors
+func getColor(n int) string {
+	it := n % len(baseColors)
+	return baseColors[it]
 }
 
 var baseColors = []string{
