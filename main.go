@@ -14,8 +14,6 @@ import (
 	"strconv"
 	"strings"
 	"text/template"
-
-	"github.com/google/uuid"
 )
 
 //go:embed templates/*
@@ -31,6 +29,7 @@ type InputConfig struct {
 }
 
 type InputObjects struct {
+	ID    string  `json:"id"`
 	File  string  `json:"file"`
 	Label *int    `json:"label"`
 	Class int     `json:"class"`
@@ -158,8 +157,13 @@ func mapTemplateData(cfg InputConfig) TemplateData {
 		Objects: make([]TemplateObject, 0, len(cfg.Objects)),
 	}
 	for _, obj := range cfg.Objects {
+		objectID := obj.ID
+		if objectID == "" {
+			splitted := strings.Split(obj.File, "/")
+			objectID = splitted[len(splitted)-1]
+		}
 		tObj := TemplateObject{
-			ID:                     string(uuid.NewString()[29:]),
+			ID:                     objectID,
 			FilePath:               obj.File,
 			Score:                  obj.Score * 100,
 			PredictedClassName:     cfg.Classes[obj.Class],

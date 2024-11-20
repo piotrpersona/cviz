@@ -64,13 +64,19 @@ select {
 </head>
 <body>
     <div class="heading"> 
-        <a href="https://github.com/piotrpersona/cviz?tab=readme-ov-file#manual" target="blank">
         <svg   width="35.0mm"   height="29.225mm"   viewBox="0 0 58.416214 48.758884"   version="1.1"   id="svg1"   xmlns="http://www.w3.org/2000/svg"   xmlns:svg="http://www.w3.org/2000/svg">  <defs     id="defs1" />  <g     id="layer1"     transform="translate(-0.88305633,-57.217422)">    <g       id="g15"       transform="translate(-58.416215)">      <path         id="circle4"         style="fill:#f6c177;fill-opacity:1;stroke-width:0.0573587"         d="m 88.812292,66.391813 a 6.5824051,6.5824051 0 0 0 -6.582543,6.582544 6.5824051,6.5824051 0 0 0 6.582543,6.582544 6.5824051,6.5824051 0 0 0 6.582544,-6.582544 6.5824051,6.5824051 0 0 0 -0.674894,-2.899565 2.719734,2.719734 0 0 1 -2.707845,2.550749 2.719734,2.719734 0 0 1 -2.71973,-2.71973 2.719734,2.719734 0 0 1 2.660819,-2.715597 6.5824051,6.5824051 0 0 0 -3.140894,-0.798401 z" />      <path         id="ellipse6"         style="fill:none;fill-opacity:1;stroke:#f6c177;stroke-width:2.879;stroke-dasharray:none;stroke-opacity:1"         d="M 88.491322,58.656922 A 30.852426,26.194034 0 0 0 60.969901,73.135095 30.852426,26.194034 0 0 0 88.491322,87.614092 30.852426,26.194034 0 0 0 116.04486,73.080202 30.852426,26.194034 0 0 0 88.491322,58.656922 Z" />      <circle         style="fill:none;fill-opacity:1;stroke:#f6c177;stroke-width:3.05964;stroke-dasharray:none;stroke-opacity:1"         id="path2"         cx="88.812325"         cy="72.974266"         r="13.89559" />    </g>    <text       xml:space="preserve"       style="font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;font-size:23.4192px;line-height:0.6;font-family:'CaskaydiaMono Nerd Font';-inkscape-font-specification:'CaskaydiaMono Nerd Font Light';text-align:center;letter-spacing:0px;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#f6c177;fill-opacity:1;stroke:#f6c177;stroke-width:1.37478;stroke-dasharray:none;stroke-opacity:1"       x="28.930805"       y="111.252"       id="text14"       transform="scale(1.0604367,0.94300774)"><tspan         id="tspan14"         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0.6;font-family:Courier;-inkscape-font-specification:Courier;writing-mode:lr-tb;direction:ltr;fill-rule:evenodd;stroke-width:1.37478;stroke-dasharray:none"         x="28.930805"         y="111.252">cviz</tspan></text>  </g></svg>
     </div>
 
     <div class="container">
         {{ range $obj := .Objects }}
         <div id="{{ $obj.ID }}" class="object"> 
+            <p>
+            {{ if $obj.ID }}
+            {{ $obj.ID }}
+            {{ else }} 
+            {{ ""}}
+            {{ end }}
+            </p>
             <a href="{{ $obj.FilePath }}" target="_blank">
                 <img src="{{ $obj.FilePath }}" width=200 height=150 style="border-color: {{ $obj.PredictedClassColorHex }}"/>
             </a>
