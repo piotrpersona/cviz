@@ -28,6 +28,7 @@ JSON must be in format:
     ],
     "objects": [
         {
+            "id": "object identifier to display",
             "file": "/path/to/peacock.jpeg",
             "label": 1,
             "class": 0,
